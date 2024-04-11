@@ -12,6 +12,7 @@ import (
 var url string = "http://localhost:8080/"
 var brokenRetryWord string = "a while"
 var whileTime int = 7
+var responseHeader string = "Retry-After"
 
 func timeConversion(waitTime string) time.Duration {
 	passedTime, err := time.Parse(http.TimeFormat, waitTime)
@@ -32,12 +33,11 @@ func timeConversion(waitTime string) time.Duration {
 }
 
 func responseCode(response *http.Response) bool {
-	_, exists := response.Header["Retry-After"]
+	_, exists := response.Header[responseHeader]
 	if exists {
-		sleepTime := timeConversion(response.Header["Retry-After"][0])
-		fmt.Println("sleeping")
+		fmt.Println(response.Header[responseHeader][0])
+		sleepTime := timeConversion(response.Header[responseHeader][0])
 		time.Sleep(sleepTime)
-		fmt.Println("woke")
 		return true
 	}
 	return false
@@ -46,14 +46,14 @@ func responseCode(response *http.Response) bool {
 func main(){
 	response, err := http.Get(url)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error making http request: %v", err)
+		fmt.Fprintf(os.Stderr, "Error making http request: %v\n", err)
 		os.Exit(1)
 	}
 	defer response.Body.Close()// close response body 
 
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error in extracting data from body: %v", err)
+		fmt.Fprintf(os.Stderr, "Error in extracting data from body: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -62,11 +62,10 @@ func main(){
 	fmt.Println(text)
 	fmt.Printf("client: status code: %d\n", response.StatusCode)
 	if response.StatusCode != 429 && response.StatusCode !=200{
-		fmt.Fprintf(os.Stderr, "Error status code: %v", response.StatusCode)
+		fmt.Fprintf(os.Stderr, "Error status code: %v\n", response.StatusCode)
 		os.Exit(1)
 	}
 	if responseCode(response){
-		fmt.Println("looping")
 		main()
 	}
 	
