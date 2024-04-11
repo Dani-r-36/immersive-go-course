@@ -47,7 +47,7 @@ func main() {
 			conn.Close()
 		default:
 			// This shouldn't be possible, as we generated the random number to be at most 9.
-			// Print out enough information in our local log that we can notice and debug what happened:
+			// Print out enough information in our local log that we can notcdice and debug what happened:
 			fmt.Fprintf(os.Stderr, "Reached unreachable code - HTTP handler switch encountered unhandled random number %d which shouldn't be possible", randomNumber)
 			// Give a very generic error message to the caller, because they don't know anything about the internals of our code, and we don't want to tell them anything about it.
 			w.WriteHeader(500)
@@ -64,6 +64,7 @@ func main() {
 
 func rejectAsTooBusy(w http.ResponseWriter, retryAfterHeader string) {
 	w.Header().Set("Retry-After", retryAfterHeader)
+	fmt.Fprint(os.Stderr, "Error: Sever busy, trying again")
 	w.WriteHeader(429)
 	w.Write([]byte("Sorry, I'm too busy"))
 }
