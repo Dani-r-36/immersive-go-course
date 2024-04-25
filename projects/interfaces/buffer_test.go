@@ -1,8 +1,8 @@
-package main
+package buffer
 
 import (
-	"testing"
 	"reflect"
+	"testing"
 )
 
 func TestBytesReturn(t *testing.T){
@@ -27,15 +27,17 @@ func TestBytesWrite(t *testing.T){
 func TestReadFit(t *testing.T){
 	b := StringBuffer("hello world")
 	sliceAmount := make([]byte, 11)
-	remaining := b.Read(sliceAmount)
+	remaining, read := b.Read(sliceAmount)
 	reflect.DeepEqual(11,remaining)
+	reflect.DeepEqual(b, read)
 
 }
 
 func TestReadSmall(t *testing.T){
 	b := StringBuffer("hello world")
 	sliceAmount := make([]byte, 5)
-	remaining := b.Read(sliceAmount)
+	remaining, read := b.Read(sliceAmount)
 	reflect.DeepEqual(6,remaining)
+	reflect.DeepEqual(read, ([]byte("hello")))
 	
 }

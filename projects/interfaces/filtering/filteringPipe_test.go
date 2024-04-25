@@ -22,7 +22,7 @@ func TestWriterReturn(t *testing.T){
 			//passed buffer into writer
 			filteredpipe := NewFilteringPipe(b)
 			for _, inputData := range tt.got{
-				n, _ := filteredpipe.Write([]byte(inputData))
+				n, _ := filteredpipe.WriteNext([]byte(inputData))
 				reflect.DeepEqual(len(inputData),n)
 			}
 		})

@@ -20,7 +20,7 @@ func NewFilteringPipe(w io.Writer) filteringPipe {
 // }
 
 
-func (fp *filteringPipe) Write(data []byte) (int, error){
+func (fp *filteringPipe) WriteNext(data []byte) (int, error){
 	for i:= range data{
 		if data[i] <='0'|| data[i]>='9'{
 			_, err := fp.writer.Write(data[i:i+1])

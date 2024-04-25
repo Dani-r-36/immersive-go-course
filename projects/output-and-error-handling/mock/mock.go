@@ -49,6 +49,9 @@ func (m *MockRoundTripper) AssertGotRightCalls() {
 	require.Equalf(m.t, len(m.responses), m.requestCount, "Expected %d requests, got %d", len(m.responses), m.requestCount)
 }
 
+
+/*this is what is used to mock the round trip method in http and returns the reponses slice and increments the requests count, 
+to check that the number of mock request (m.responses) match the stubbed repsoness (m.request count)*/
 func (m *MockRoundTripper) RoundTrip(r *http.Request) (*http.Response, error) {
 	m.t.Helper()
 

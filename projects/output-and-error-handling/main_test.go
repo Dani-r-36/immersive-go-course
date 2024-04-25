@@ -46,32 +46,31 @@ func TestFetch429(t *testing.T) {
 	require.GreaterOrEqual(t, elapsed, 1*time.Second)
 }
 
-// func TestTimeConversion(t *testing.T){
-// 	t.Run("time now format test", func(t *testing.T){
-// 		timeAfterDelay := time.Now().UTC().Add(time.Duration(5) * time.Second)
-// 		httpTime := timeAfterDelay.Format(http.TimeFormat)
-// 		// httpTime := "Thu, 11 Apr 2024 13:10:05 GMT"
-// 		want := time.Duration(5) * time.Second
-// 		got := timeConversion(httpTime)
+func TestTimeConversion(t *testing.T){
+	t.Run("time now format test", func(t *testing.T){
+		timeAfterDelay := time.Now().UTC().Add(time.Duration(5) * time.Second)
+		httpTime := timeAfterDelay.Format(http.TimeFormat)
+		// httpTime := "Thu, 11 Apr 2024 13:10:05 GMT"
+		want := time.Duration(5) * time.Second
+		got := timeConversion(httpTime)
 
-// 		//Apparently go is too fast so can be off by nanoseconds (hour of debugging)
-// 		tolerance := time.Duration(1000) * time.Millisecond
-// 		var absValue time.Duration
-// 		if (got-want) <0{ absValue = -(got-want)}else{absValue = got-want}
-// 		if absValue>tolerance{
-// 			t.Errorf("got %d want %d which had tolerance of %d given, %v", got, want, tolerance, httpTime)
-// 		}
-// 	})
+		//Apparently go is too fast so can be off by nanoseconds (hour of debugging)
+		tolerance := time.Duration(1000) * time.Millisecond
+		var absValue time.Duration
+		if (got-want) <0{ absValue = -(got-want)}else{absValue = got-want}
+		if absValue>tolerance{
+			t.Errorf("got %d want %d which had tolerance of %d given, %v", got, want, tolerance, httpTime)
+		}
+	})
 
-// 	t.Run("time in normal format", func(t *testing.T){
-// 		want := time.Duration(5) * time.Second
-// 		got := timeConversion("5")
-// 		wantRounded := int (want.Seconds() + 0.5)
-// 		gotRounded := int (got.Seconds() + 0.5)
-// 		//Apparently go is too fast so can be off by nanoseconds (hour of debugging)
-// 		// fmt.Println(wantRounded, gotRounded)
-// 		if gotRounded != wantRounded{
-// 			t.Errorf("got %d want %d given, %v", gotRounded, wantRounded, 5)
-// 		}
-// 	})
-// }
+	t.Run("time in normal format", func(t *testing.T){
+		want := time.Duration(5) * time.Second
+		got := timeConversion("5")
+		wantRounded := int (want.Seconds() + 0.5)
+		gotRounded := int (got.Seconds() + 0.5)
+		//Apparently go is too fast so can be off by nanoseconds (hour of debugging)
+		if gotRounded != wantRounded{
+			t.Errorf("got %d want %d given, %v", gotRounded, wantRounded, 5)
+		}
+	})
+}

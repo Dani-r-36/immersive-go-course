@@ -1,4 +1,4 @@
-package main
+package buffer
 
 
 //create new type, interface or struct because were extending bytes methods
@@ -25,7 +25,7 @@ func (b *BytesSlice) Write(extension []byte){
 	b.data = append(b.data, extension...)
 }
 
-func(b *BytesSlice) Read(index []byte)int{
+func(b *BytesSlice) Read(index []byte) (int, []byte){
 	remaining := len(b.data) - b.pos
 	total := len(index)
 	if remaining < total{
@@ -33,5 +33,5 @@ func(b *BytesSlice) Read(index []byte)int{
 	}
 	copy(index, b.data[b.pos:b.pos+total])
 	b.pos += total
-	return total
+	return total, index
 }
